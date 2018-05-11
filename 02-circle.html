@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title> hello world</title>
+<meta name="description" content="">
+<meta name="keywords" content="">
+<link href="" rel="stylesheet">
+    <style type="text/css">
+        *{margin:0;padding:0;}
+        html,body{
+            height:100%;
+        }
+
+
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+    <script type="text/javascript">
+        var canvas = document.getElementById('canvas');
+        var ctx = canvas.getContext('2d');
+        var w = canvas.width = canvas.parentNode.offsetWidth;
+        var h = canvas.height = canvas.parentNode.offsetHeight;
+        var r = 200;//小圆半径
+        var R = Math.sqrt( Math.pow(w/2,2)+Math.pow(h/2,2) );//圆的最大半径
+        var offset = 155;//圆与圆之间距离
+        var num = Math.floor( (R-r)/offset) ;
+
+
+        var arr = [];
+
+        for(var i=0;i<=num;i++){
+            var obj = {};
+            obj.r = offset*i + r;
+
+            arr.push(obj);
+
+        }
+        //动画
+        (function requestA(){
+            ctx.clearRect(0,0,w,h);
+            for(var i=0;i<arr.length;i++){
+                if( arr[i].r > R ){
+                    arr[i].r = r;
+
+                }else{
+                    arr[i].r++;
+                }
+                arr[i].opacity = (R-arr[i].r)/R;
+                draw(arr[i]);
+            }
+            requestAnimationFrame(requestA);
+        })();
+
+        //绘制canvas
+        function draw(obj){
+            ctx.beginPath();
+            ctx.lineWidth = obj.r/150;//线条宽度
+            ctx.strokeStyle = 'rgba(0,0,0,'+obj.opacity+')';//绘制边框颜色
+            ctx.arc(w/2,h/2,obj.r,0,360*Math.PI/180,true);//绘制圆路径
+            ctx.stroke();
+        };
+
+
+
+
+    </script>
+</body>
+</html>
